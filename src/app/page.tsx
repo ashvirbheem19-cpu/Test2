@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { SpiralAnimation } from "@/components/ui/spiral-animation"
@@ -11,21 +11,45 @@ const WORDS = ["short", "cute", "bookworm", "always cold", "troublesome"]
 export default function Home() {
   const router = useRouter()
   const [animating, setAnimating] = useState(false)
-  const [wordIndex, setWordIndex] = useState(0)
+  const [displayedText, setDisplayedText] = useState("")
+  const wordIndexRef = useRef(0)
+  const charIndexRef = useRef(0)
+
+  useEffect(() => {
+    if (!animating) return
+
+    const typeSpeed = 100
+    const pauseAfterWord = 500
+    let timeout: ReturnType<typeof setTimeout>
+
+    const typeNextChar = () => {
+      const word = WORDS[wordIndexRef.current]
+      if (charIndexRef.current < word.length) {
+        setDisplayedText(word.slice(0, charIndexRef.current + 1))
+        charIndexRef.current++
+        timeout = setTimeout(typeNextChar, typeSpeed)
+      } else {
+        timeout = setTimeout(() => {
+          wordIndexRef.current++
+          if (wordIndexRef.current < WORDS.length) {
+            charIndexRef.current = 0
+            setDisplayedText("")
+            timeout = setTimeout(typeNextChar, typeSpeed)
+          } else {
+            router.push("/second")
+          }
+        }, pauseAfterWord)
+      }
+    }
+
+    timeout = setTimeout(typeNextChar, typeSpeed)
+
+    return () => clearTimeout(timeout)
+  }, [animating, router])
 
   const handleEnter = useCallback(() => {
     setAnimating(true)
-    let i = 0
-    const interval = setInterval(() => {
-      i++
-      if (i < WORDS.length) {
-        setWordIndex(i)
-      } else {
-        clearInterval(interval)
-        router.push("/second")
-      }
-    }, 600)
-  }, [router])
+  }, [])
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#0a0000]">
@@ -53,16 +77,10 @@ export default function Home() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <motion.span
-              key={wordIndex}
-              initial={{ opacity: 0, y: 20, scale: 0.8 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.8 }}
-              transition={{ duration: 0.4 }}
-              className="text-4xl md:text-6xl font-bold tracking-wide text-white font-[family-name:var(--font-playfair)]"
-            >
-              {WORDS[wordIndex]}
-            </motion.span>
+            <span className="text-4xl md:text-6xl font-bold tracking-wide text-white font-[family-name:var(--font-playfair)]">
+              {displayedText}
+              <span className="animate-pulse">|</span>
+            </span>
           </motion.div>
         )}
       </AnimatePresence>
