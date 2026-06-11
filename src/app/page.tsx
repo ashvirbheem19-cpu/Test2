@@ -11,7 +11,7 @@ export default function Home() {
           pixelSize={20}
           fadeDuration={400}
           delay={800}
-          pixelClassName="rounded-full bg-gradient-to-br from-[#8b0000] to-[#ff1a1a]"
+          pixelClassName="rounded-full bg-gradient-to-br from-[#ffb6c1] to-[#ffc0cb]"
         />
       </div>
 
