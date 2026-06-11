@@ -15,7 +15,7 @@ export default function Home() {
         />
       </div>
 
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 text-center">
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 text-center pointer-events-none">
         <div className="mb-8 inline-block px-6 py-2 rounded-full border border-red-700 bg-red-950/40 text-red-200 text-sm font-medium">
           Now available — try our new platform
         </div>
@@ -31,7 +31,7 @@ export default function Home() {
           A modern platform designed for teams who want to ship faster, scale smarter, and build better.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col sm:flex-row gap-4 pointer-events-auto">
           <Button size="lg" variant="primary">
             Get Started
           </Button>
