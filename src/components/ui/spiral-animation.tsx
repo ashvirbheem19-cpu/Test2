@@ -149,9 +149,20 @@ class AnimationController {
             const y = this.viewZoom * position.y / dotDepthFromCamera
             const sw = 400 * sizeFactor / dotDepthFromCamera
             
-            this.ctx.lineWidth = sw
+            const outerR = sw * 0.5
+            const innerR = outerR * 0.4
+            const points = 5
+            
             this.ctx.beginPath()
-            this.ctx.arc(x, y, 0.55125, 0, Math.PI * 2)
+            for (let i = 0; i < points * 2; i++) {
+                const r = i % 2 === 0 ? outerR : innerR
+                const angle = (i * Math.PI / points) - Math.PI / 2
+                const px = x + r * Math.cos(angle)
+                const py = y + r * Math.sin(angle)
+                if (i === 0) this.ctx.moveTo(px, py)
+                else this.ctx.lineTo(px, py)
+            }
+            this.ctx.closePath()
             this.ctx.fill()
         }
     }
@@ -168,7 +179,7 @@ class AnimationController {
         const ctx = this.ctx
         if (!ctx) return
         
-        ctx.fillStyle = '#0a0000'
+        ctx.fillStyle = '#050005'
         ctx.fillRect(0, 0, this.size, this.size)
         
         ctx.save()
@@ -181,7 +192,7 @@ class AnimationController {
         
         this.drawTrail(t1)
         
-        ctx.fillStyle = '#ff2222'
+        ctx.fillStyle = '#ffeedd'
         for (const star of this.stars) {
             star.render(t1, this)
         }
@@ -196,8 +207,7 @@ class AnimationController {
             const f = this.map(i, 0, this.trailLength, 1.1, 0.1)
             const sw = (1.43325 * (1 - t1) + 3.3075 * Math.sin(Math.PI * t1)) * f
             
-            this.ctx.fillStyle = '#ff2222'
-            this.ctx.lineWidth = sw
+            this.ctx.fillStyle = '#ffeedd'
             
             const pathTime = t1 - 0.00015 * i
             const position = this.spiralPath(pathTime)
@@ -211,8 +221,19 @@ class AnimationController {
                 i % 2 === 0
             )
             
+            const outerR = sw * 0.5
+            const innerR = outerR * 0.4
+            const points = 5
             this.ctx.beginPath()
-            this.ctx.arc(rotated.x, rotated.y, sw / 2, 0, Math.PI * 2)
+            for (let j = 0; j < points * 2; j++) {
+                const r = j % 2 === 0 ? outerR : innerR
+                const angle = (j * Math.PI / points) - Math.PI / 2
+                const px = rotated.x + r * Math.cos(angle)
+                const py = rotated.y + r * Math.sin(angle)
+                if (j === 0) this.ctx.moveTo(px, py)
+                else this.ctx.lineTo(px, py)
+            }
+            this.ctx.closePath()
             this.ctx.fill()
         }
     }
