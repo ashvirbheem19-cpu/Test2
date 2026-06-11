@@ -18,7 +18,7 @@ export default function Home() {
   useEffect(() => {
     if (!animating) return
 
-    const typeSpeed = 100
+    const typeSpeed = 120
     const pauseAfterWord = 500
     let timeout: ReturnType<typeof setTimeout>
 
