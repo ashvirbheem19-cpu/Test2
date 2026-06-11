@@ -151,7 +151,7 @@ class AnimationController {
             
             this.ctx.lineWidth = sw
             this.ctx.beginPath()
-            this.ctx.arc(x, y, 0.525, 0, Math.PI * 2)
+            this.ctx.arc(x, y, 0.55125, 0, Math.PI * 2)
             this.ctx.fill()
         }
     }
@@ -194,7 +194,7 @@ class AnimationController {
     private drawTrail(t1: number) {
         for (let i = 0; i < this.trailLength; i++) {
             const f = this.map(i, 0, this.trailLength, 1.1, 0.1)
-            const sw = (1.365 * (1 - t1) + 3.15 * Math.sin(Math.PI * t1)) * f
+            const sw = (1.43325 * (1 - t1) + 3.3075 * Math.sin(Math.PI * t1)) * f
             
             this.ctx.fillStyle = '#ff2222'
             this.ctx.lineWidth = sw
@@ -331,7 +331,7 @@ class Star {
                 sizeMultiplier = 1.2 * (1.0 - t) + this.finalScale * t;
             }
             
-            const dotSize = 8.925 * this.strokeWeightFactor * sizeMultiplier;
+            const dotSize = 9.37125 * this.strokeWeightFactor * sizeMultiplier;
             
             controller.showProjectedDot(position, dotSize);
         }
