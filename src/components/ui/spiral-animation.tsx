@@ -150,8 +150,6 @@ class AnimationController {
             const sw = 400 * sizeFactor / dotDepthFromCamera
             
             const outerR = sw * 0.5
-            const innerR = outerR * 0.4
-            const points = 5
             
             if (outerR > 0.75) {
                 const glowR = outerR * 3
@@ -167,15 +165,7 @@ class AnimationController {
             }
             
             this.ctx.beginPath()
-            for (let i = 0; i < points * 2; i++) {
-                const r = i % 2 === 0 ? outerR : innerR
-                const angle = (i * Math.PI / points) - Math.PI / 2
-                const px = x + r * Math.cos(angle)
-                const py = y + r * Math.sin(angle)
-                if (i === 0) this.ctx.moveTo(px, py)
-                else this.ctx.lineTo(px, py)
-            }
-            this.ctx.closePath()
+            this.ctx.arc(x, y, outerR * 0.6, 0, Math.PI * 2)
             this.ctx.fill()
         }
     }
@@ -239,8 +229,6 @@ class AnimationController {
             )
             
             const outerR = sw * 0.5
-            const innerR = outerR * 0.4
-            const points = 5
             
             if (outerR > 0.5) {
                 const grad = this.ctx.createRadialGradient(rotated.x, rotated.y, 0, rotated.x, rotated.y, outerR * 2.5)
@@ -255,15 +243,7 @@ class AnimationController {
             }
             
             this.ctx.beginPath()
-            for (let j = 0; j < points * 2; j++) {
-                const r = j % 2 === 0 ? outerR : innerR
-                const angle = (j * Math.PI / points) - Math.PI / 2
-                const px = rotated.x + r * Math.cos(angle)
-                const py = rotated.y + r * Math.sin(angle)
-                if (j === 0) this.ctx.moveTo(px, py)
-                else this.ctx.lineTo(px, py)
-            }
-            this.ctx.closePath()
+            this.ctx.arc(rotated.x, rotated.y, outerR * 0.6, 0, Math.PI * 2)
             this.ctx.fill()
             this.ctx.globalAlpha = 1
         }
