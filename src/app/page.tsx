@@ -1,19 +1,12 @@
 "use client"
 
-import { PixelTrail } from "@/components/ui/pixel-trail"
+import { SpiralAnimation } from "@/components/ui/spiral-animation"
 import { Button } from "@/components/ui/button"
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#1a0000] via-[#3b0000] to-[#5c0000]">
-      <div className="absolute inset-0 z-0">
-        <PixelTrail
-          pixelSize={20}
-          fadeDuration={400}
-          delay={800}
-          pixelClassName="rounded-full bg-gradient-to-br from-[#ffb6c1] to-[#ffc0cb]"
-        />
-      </div>
+    <div className="relative min-h-screen overflow-hidden bg-[#0a0000]">
+      <SpiralAnimation />
 
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 text-center pointer-events-none">
         <div className="mb-8 inline-block px-6 py-2 rounded-full border border-red-700 bg-red-950/40 text-red-200 text-sm font-medium">
@@ -43,8 +36,6 @@ export default function Home() {
           </Button>
         </div>
       </div>
-
-      <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-[#1a0000] to-transparent pointer-events-none" />
     </div>
   )
 }
