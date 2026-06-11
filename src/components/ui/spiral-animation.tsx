@@ -210,7 +210,7 @@ class AnimationController {
     private drawTrail(t1: number) {
         for (let i = 0; i < this.trailLength; i++) {
             const f = this.map(i, 0, this.trailLength, 1.1, 0.1)
-            const sw = (1.43325 * (1 - t1) + 3.3075 * Math.sin(Math.PI * t1)) * f
+            const sw = (1.3615875 * (1 - t1) + 3.142125 * Math.sin(Math.PI * t1)) * f
             
             const trailAlpha = 0.5 + 0.5 * Math.sin(this.time * 3 + i * 0.3)
             this.ctx.fillStyle = '#ffeedd'
@@ -381,7 +381,7 @@ class Star {
                 sizeMultiplier = 1.2 * (1.0 - t) + this.finalScale * t;
             }
             
-            const dotSize = 9.37125 * this.strokeWeightFactor * sizeMultiplier;
+            const dotSize = 8.9026875 * this.strokeWeightFactor * sizeMultiplier;
             
             controller.showProjectedDot(position, dotSize);
         }

@@ -1,9 +1,8 @@
+import React from "react"
 import { cn } from '@/lib/utils'
 
-export const Button: React.FC<{
+export const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & {
   icon?: React.ReactNode
-  children?: React.ReactNode
-  className?: string
 }> = ({ icon, children, className, ...props }) => (
   <button
     className={cn(`relative cursor-pointer z-0 flex items-center justify-center gap-2 overflow-hidden rounded-md 
