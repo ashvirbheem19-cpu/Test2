@@ -153,6 +153,19 @@ class AnimationController {
             const innerR = outerR * 0.4
             const points = 5
             
+            if (outerR > 0.75) {
+                const glowR = outerR * 3
+                const grad = this.ctx.createRadialGradient(x, y, 0, x, y, glowR)
+                grad.addColorStop(0, 'rgba(255, 238, 221, 0.08)')
+                grad.addColorStop(1, 'rgba(255, 238, 221, 0)')
+                const prevFill = this.ctx.fillStyle
+                this.ctx.fillStyle = grad
+                this.ctx.beginPath()
+                this.ctx.arc(x, y, glowR, 0, Math.PI * 2)
+                this.ctx.fill()
+                this.ctx.fillStyle = prevFill
+            }
+            
             this.ctx.beginPath()
             for (let i = 0; i < points * 2; i++) {
                 const r = i % 2 === 0 ? outerR : innerR
@@ -192,10 +205,12 @@ class AnimationController {
         
         this.drawTrail(t1)
         
-        ctx.fillStyle = '#ffeedd'
         for (const star of this.stars) {
+            ctx.fillStyle = star.getColor()
+            ctx.globalAlpha = star.getTwinkle(this.time)
             star.render(t1, this)
         }
+        ctx.globalAlpha = 1
         
         this.drawStartDot()
         
@@ -207,7 +222,9 @@ class AnimationController {
             const f = this.map(i, 0, this.trailLength, 1.1, 0.1)
             const sw = (1.43325 * (1 - t1) + 3.3075 * Math.sin(Math.PI * t1)) * f
             
+            const trailAlpha = 0.5 + 0.5 * Math.sin(this.time * 3 + i * 0.3)
             this.ctx.fillStyle = '#ffeedd'
+            this.ctx.globalAlpha = trailAlpha
             
             const pathTime = t1 - 0.00015 * i
             const position = this.spiralPath(pathTime)
@@ -224,6 +241,19 @@ class AnimationController {
             const outerR = sw * 0.5
             const innerR = outerR * 0.4
             const points = 5
+            
+            if (outerR > 0.5) {
+                const grad = this.ctx.createRadialGradient(rotated.x, rotated.y, 0, rotated.x, rotated.y, outerR * 2.5)
+                grad.addColorStop(0, 'rgba(255, 238, 221, 0.06)')
+                grad.addColorStop(1, 'rgba(255, 238, 221, 0)')
+                const prevFill = this.ctx.fillStyle
+                this.ctx.fillStyle = grad
+                this.ctx.beginPath()
+                this.ctx.arc(rotated.x, rotated.y, outerR * 2.5, 0, Math.PI * 2)
+                this.ctx.fill()
+                this.ctx.fillStyle = prevFill
+            }
+            
             this.ctx.beginPath()
             for (let j = 0; j < points * 2; j++) {
                 const r = j % 2 === 0 ? outerR : innerR
@@ -235,6 +265,7 @@ class AnimationController {
             }
             this.ctx.closePath()
             this.ctx.fill()
+            this.ctx.globalAlpha = 1
         }
     }
     
@@ -262,6 +293,9 @@ class Star {
     private rotationDirection: number
     private expansionRate: number
     private finalScale: number
+    private twinklePhase: number
+    private twinkleSpeed: number
+    private colorTemp: number
     
     constructor(cameraZ: number, cameraTravelDistance: number) {
         this.angle = Math.random() * Math.PI * 2
@@ -269,6 +303,9 @@ class Star {
         this.rotationDirection = Math.random() > 0.5 ? 1 : -1
         this.expansionRate = 1.2 + Math.random() * 0.8
         this.finalScale = 0.7 + Math.random() * 0.6
+        this.twinklePhase = Math.random() * Math.PI * 2
+        this.twinkleSpeed = 0.8 + Math.random() * 1.2
+        this.colorTemp = Math.random()
         
         this.dx = this.distance * Math.cos(this.angle)
         this.dy = this.distance * Math.sin(this.angle)
@@ -279,6 +316,18 @@ class Star {
         const lerp = (start: number, end: number, t: number) => start * (1 - t) + end * t
         this.z = lerp(this.z, cameraTravelDistance / 2, 0.3 * this.spiralLocation)
         this.strokeWeightFactor = Math.pow(Math.random(), 2.0)
+    }
+    
+    getTwinkle(time: number): number {
+        return 0.55 + 0.45 * Math.sin(time * this.twinkleSpeed * Math.PI * 2 + this.twinklePhase)
+    }
+    
+    getColor(): string {
+        const t = this.colorTemp
+        const r = Math.floor(200 + 55 * t)
+        const g = Math.floor(190 + 48 * t)
+        const b = Math.floor(180 + 41 * (1 - t))
+        return `rgb(${r}, ${g}, ${b})`
     }
     
     render(p: number, controller: AnimationController) {
