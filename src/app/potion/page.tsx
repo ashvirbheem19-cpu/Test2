@@ -33,15 +33,7 @@ export default function PotionPage() {
   const [bubbling, setBubbling] = useState(false)
   const countRef = useRef<Record<string, number>>({})
 
-  const handleDragStart = (e: React.DragEvent, id: string) => {
-    e.dataTransfer.setData("ingredient", id)
-  }
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault()
-    const id = e.dataTransfer.getData("ingredient")
-    if (!id) return
-
+  const addIngredient = (id: string) => {
     countRef.current[id] = (countRef.current[id] || 0) + 1
     setDropped((prev) => [...prev, id])
     setBubbling(true)
@@ -50,6 +42,17 @@ export default function PotionPage() {
     setMessage(getMessage(id, countRef.current[id] - 1))
     setShowMessage(true)
     setTimeout(() => setShowMessage(false), 3000)
+  }
+
+  const handleDragStart = (e: React.DragEvent, id: string) => {
+    e.dataTransfer.setData("ingredient", id)
+  }
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+    const id = e.dataTransfer.getData("ingredient")
+    if (!id) return
+    addIngredient(id)
   }
 
   const handleDragOver = (e: React.DragEvent) => e.preventDefault()
@@ -64,7 +67,7 @@ export default function PotionPage() {
           brew something magical
         </h1>
         <p className="font-[family-name:var(--font-dancing)] text-amber-200/40 text-base max-w-md">
-          drag ingredients into the cauldron to see what love potion you create
+          drag or tap ingredients into the cauldron to see what love potion you create
         </p>
       </div>
 
@@ -74,7 +77,8 @@ export default function PotionPage() {
             key={item.id}
             draggable
             onDragStart={(e) => handleDragStart(e, item.id)}
-            className="flex flex-col items-center gap-1 cursor-grab active:cursor-grabbing px-3 py-2 rounded-lg border border-amber-800/30 bg-[#2a0a00]/40 hover:border-amber-600/50 hover:bg-[#2a0a00]/70 transition-colors select-none"
+            onClick={() => addIngredient(item.id)}
+            className="flex flex-col items-center gap-1 cursor-grab active:cursor-grabbing px-3 py-2 rounded-lg border border-amber-800/30 bg-[#2a0a00]/40 hover:border-amber-600/50 hover:bg-[#2a0a00]/70 active:bg-amber-900/40 transition-colors select-none"
           >
             <span className="text-3xl">{item.emoji}</span>
             <span className="font-[family-name:var(--font-dancing)] text-amber-300/50 text-xs">{item.label}</span>
