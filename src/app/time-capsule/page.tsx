@@ -4,7 +4,9 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
 const STORAGE_KEY = "time-capsule-date"
-const DEFAULT_MESSAGE = `hey you.
+
+const MESSAGES = [
+  `hey you.
 
 if you're reading this, the date has come —
 which means i loved you all the way until now,
@@ -18,7 +20,101 @@ no matter how much time passes,
 my answer stays the same:
 you. always you.
 
-i love you. ♡`
+i love you. ♡`,
+
+  `to the girl who turned my world magical —
+
+some things are bigger than magic,
+and you are one of them.
+
+you are my patronus on the dark days,
+my felix felicis, my constant joy.
+
+time may pass, seasons may change,
+but my love for you is eternal.
+unchanged. unwavering.
+
+always. ♡`,
+
+  `hey, you.
+
+in a world of upside downs and unknown things,
+you are my one constant.
+
+you are the voice that pulls me back,
+the light in every dark room,
+the reason i keep fighting.
+
+no matter what dimension i'm in,
+i'll always find my way to you.
+
+i love you. ♡`,
+
+  `my love,
+
+every love story is beautiful,
+but ours is my favourite.
+
+you are my once upon a time,
+my happily ever after,
+and every beautiful chapter in between.
+
+the clock may tick, the days may turn,
+but my heart belongs to you.
+today, tomorrow, always.
+
+forever yours. ♡`,
+
+  `to the girl who has my whole heart —
+
+some things don't need big words.
+just this: you are everything.
+
+every day with you feels like coming home.
+every laugh, every hug, every quiet moment —
+i treasure it all.
+
+thank you for being you.
+thank you for choosing me.
+
+i love you. always will. ♡`,
+
+  `my universe,
+
+you are made of stars, and so is the love i have for you.
+it stretches beyond what words can hold,
+beyond time, beyond space.
+
+no matter how far apart we may be,
+my heart orbits around you.
+always.
+
+you are my home.
+you are my forever.
+
+i love you. ♡`,
+]
+
+function pickMessage(dateStr: string): string {
+  let hash = 0
+  for (let i = 0; i < dateStr.length; i++) {
+    hash = ((hash << 5) - hash) + dateStr.charCodeAt(i)
+    hash |= 0
+  }
+  return MESSAGES[Math.abs(hash) % MESSAGES.length]
+}
+
+function getTomorrow(): string {
+  const d = new Date()
+  d.setDate(d.getDate() + 1)
+  return d.toISOString().split("T")[0]
+}
+
+function isUnlockable(dateStr: string): boolean {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  return new Date(dateStr).getTime() <= today.getTime()
+}
 
 export default function TimeCapsulePage() {
   const [targetDate, setTargetDate] = useState("")
@@ -30,7 +126,7 @@ export default function TimeCapsulePage() {
     if (stored) {
       setTargetDate(stored)
       setSaved(true)
-      if (new Date(stored) <= new Date()) setUnlocked(true)
+      if (isUnlockable(stored)) setUnlocked(true)
     }
   }, [])
 
@@ -39,7 +135,7 @@ export default function TimeCapsulePage() {
     if (!targetDate) return
     localStorage.setItem(STORAGE_KEY, targetDate)
     setSaved(true)
-    if (new Date(targetDate) <= new Date()) setUnlocked(true)
+    if (isUnlockable(targetDate)) setUnlocked(true)
   }
 
   const handleReset = () => {
@@ -75,7 +171,7 @@ export default function TimeCapsulePage() {
                 value={targetDate}
                 onChange={(e) => setTargetDate(e.target.value)}
                 className="bg-transparent border border-amber-800/40 text-[#f5e6d0] font-[family-name:var(--font-playfair)] px-4 py-2 rounded-md outline-none focus:border-amber-500/60"
-                min={new Date().toISOString().split("T")[0]}
+                min={getTomorrow()}
               />
             </div>
             <button
@@ -99,7 +195,7 @@ export default function TimeCapsulePage() {
                 <div className="relative bg-[#2a0a00]/60 border border-amber-800/30 rounded-xl p-8 md:p-12 backdrop-blur-sm">
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 text-3xl">💌</div>
                   <div className="space-y-4 text-[#d4c5a9]/80 font-[family-name:var(--font-dancing)] text-xl md:text-2xl leading-relaxed pt-4 whitespace-pre-line">
-                    {DEFAULT_MESSAGE}
+                    {pickMessage(targetDate)}
                   </div>
                 </div>
               </motion.div>

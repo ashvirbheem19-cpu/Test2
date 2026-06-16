@@ -11,7 +11,7 @@ export default function LoveLetterPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (password === "100") {
+    if (password === "0406") {
       setUnlocked(true)
       setError(false)
     } else {
