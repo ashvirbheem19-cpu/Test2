@@ -52,17 +52,26 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#0a0000]">
+    <div className="relative min-h-screen overflow-hidden bg-[#1a0500]">
       <SpiralAnimation />
 
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen pointer-events-none">
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 pointer-events-none">
+        <p className="font-[family-name:var(--font-dancing)] text-amber-300/60 text-lg md:text-xl mb-4">
+          for the girl who makes everything magical
+        </p>
+
         <div className="scale-[0.9]">
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-wide text-white font-[family-name:var(--font-playfair)]">
-            ADRIANA
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-wide text-[#f5e6d0] font-[family-name:var(--font-playfair)]">
+            hi love
           </h1>
         </div>
 
-        <div className="mt-12 pointer-events-auto">
+        <p className="font-[family-name:var(--font-dancing)] text-amber-200/40 text-base md:text-lg mt-8 max-w-md text-center leading-relaxed">
+          you are my favourite chapter, my golden snitch,
+          <br />and the best thing to ever happen to me
+        </p>
+
+        <div className="mt-10 pointer-events-auto">
           {!animating && (
             <Button onClick={handleEnter}>ENTER</Button>
           )}
@@ -72,14 +81,14 @@ export default function Home() {
       <AnimatePresence>
         {animating && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-[#0a0000]"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-[#1a0500]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <span className="text-4xl md:text-6xl font-bold tracking-wide text-white font-[family-name:var(--font-playfair)]">
+            <span className="text-4xl md:text-6xl font-bold tracking-wide text-[#f5e6d0] font-[family-name:var(--font-playfair)]">
               {displayedText}
-              <span className="animate-pulse">|</span>
+              <span className="animate-pulse text-amber-400">|</span>
             </span>
           </motion.div>
         )}

@@ -154,8 +154,8 @@ class AnimationController {
             if (outerR > 0.75) {
                 const glowR = outerR * 3
                 const grad = this.ctx.createRadialGradient(x, y, 0, x, y, glowR)
-                grad.addColorStop(0, 'rgba(255, 238, 221, 0.08)')
-                grad.addColorStop(1, 'rgba(255, 238, 221, 0)')
+                grad.addColorStop(0, 'rgba(255, 200, 80, 0.1)')
+                grad.addColorStop(1, 'rgba(255, 200, 80, 0)')
                 const prevFill = this.ctx.fillStyle
                 this.ctx.fillStyle = grad
                 this.ctx.beginPath()
@@ -182,7 +182,7 @@ class AnimationController {
         const ctx = this.ctx
         if (!ctx) return
         
-        ctx.fillStyle = '#050005'
+        ctx.fillStyle = '#1a0500'
         ctx.fillRect(0, 0, this.size, this.size)
         
         ctx.save()
@@ -213,7 +213,7 @@ class AnimationController {
             const sw = (1.3615875 * (1 - t1) + 3.142125 * Math.sin(Math.PI * t1)) * f
             
             const trailAlpha = 0.5 + 0.5 * Math.sin(this.time * 3 + i * 0.3)
-            this.ctx.fillStyle = '#ffeedd'
+            this.ctx.fillStyle = '#f0c050'
             this.ctx.globalAlpha = trailAlpha
             
             const pathTime = t1 - 0.00015 * i
@@ -232,8 +232,8 @@ class AnimationController {
             
             if (outerR > 0.5) {
                 const grad = this.ctx.createRadialGradient(rotated.x, rotated.y, 0, rotated.x, rotated.y, outerR * 2.5)
-                grad.addColorStop(0, 'rgba(255, 238, 221, 0.06)')
-                grad.addColorStop(1, 'rgba(255, 238, 221, 0)')
+                grad.addColorStop(0, 'rgba(255, 200, 80, 0.08)')
+                grad.addColorStop(1, 'rgba(255, 200, 80, 0)')
                 const prevFill = this.ctx.fillStyle
                 this.ctx.fillStyle = grad
                 this.ctx.beginPath()
@@ -304,9 +304,9 @@ class Star {
     
     getColor(): string {
         const t = this.colorTemp
-        const r = Math.floor(200 + 55 * t)
-        const g = Math.floor(190 + 48 * t)
-        const b = Math.floor(180 + 41 * (1 - t))
+        const r = Math.floor(220 + 35 * t)
+        const g = Math.floor(160 + 60 * t)
+        const b = Math.floor(80 + 40 * (1 - t))
         return `rgb(${r}, ${g}, ${b})`
     }
     

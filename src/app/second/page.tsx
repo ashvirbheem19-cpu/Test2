@@ -4,16 +4,34 @@ import { DottedSurface } from "@/components/ui/dotted-surface"
 
 export default function SecondPage() {
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen bg-[#1a0500]">
       <DottedSurface />
-      <div className="relative z-10 flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <h1 className="font-mono text-5xl md:text-7xl font-semibold tracking-tight text-foreground">
-            Welcome
-          </h1>
-          <p className="mt-4 text-lg text-muted-foreground">
-            You made it through the words.
+      <div className="relative z-10 flex items-center justify-center min-h-screen px-6">
+        <div className="max-w-xl text-center space-y-8">
+          <p className="font-[family-name:var(--font-dancing)] text-amber-300/40 text-lg">
+            a little note for you
           </p>
+
+          <h1 className="font-[family-name:var(--font-playfair)] text-4xl md:text-6xl font-bold text-[#f5e6d0] leading-tight">
+            you are my
+            <br />
+            <span className="text-amber-300">happily ever after</span>
+          </h1>
+
+          <div className="w-16 h-0.5 bg-amber-500/30 mx-auto" />
+
+          <div className="space-y-4 text-[#d4c5a9]/70 font-[family-name:var(--font-dancing)] text-xl md:text-2xl leading-relaxed">
+            <p>
+              from the pages of my favourite books to the
+              <br className="hidden md:block" /> upside down and back again —
+            </p>
+            <p>
+              every story leads me to you.
+            </p>
+            <p className="text-amber-300/60 text-lg md:text-xl pt-4">
+              i love you, always and forever. ♡
+            </p>
+          </div>
         </div>
       </div>
     </div>
