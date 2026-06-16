@@ -7,32 +7,12 @@ export default function BottlePage() {
   const [message, setMessage] = useState("")
   const [sent, setSent] = useState(false)
   const [floating, setFloating] = useState(false)
-  const [sending, setSending] = useState(false)
 
-  const handleSend = async (e: React.FormEvent) => {
+  const handleSend = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!message.trim() || sending) return
-
-    setSending(true)
+    if (!message.trim()) return
     setFloating(true)
-
-    try {
-      await fetch("https://api.emailjs.com/api/v1.0/email/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          service_id: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
-          template_id: process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
-          user_id: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
-          template_params: { message: message.trim() },
-        }),
-      })
-    } catch {
-      // silently fail — just show the animation either way
-    }
-
     setTimeout(() => {
-      setSending(false)
       setSent(true)
       setFloating(false)
     }, 2500)
@@ -72,10 +52,9 @@ export default function BottlePage() {
                 />
                 <button
                   type="submit"
-                  disabled={sending}
-                  className="px-8 py-3 rounded-md border border-cyan-700/50 text-cyan-300/80 font-[family-name:var(--font-dancing)] text-lg hover:bg-cyan-900/30 transition-colors disabled:opacity-40"
+                  className="px-8 py-3 rounded-md border border-cyan-700/50 text-cyan-300/80 font-[family-name:var(--font-dancing)] text-lg hover:bg-cyan-900/30 transition-colors"
                 >
-                  {sending ? "sending..." : "send it out to sea"}
+                  send it out to sea
                 </button>
               </form>
 
@@ -99,7 +78,8 @@ export default function BottlePage() {
                 your message is drifting across the ocean...
               </p>
               <p className="font-[family-name:var(--font-dancing)] text-cyan-300/30 text-base max-w-sm mx-auto">
-                and straight into my heart.
+                maybe one day it will wash up on a shore far away,
+                carrying your words with it.
               </p>
               <button
                 onClick={reset}
