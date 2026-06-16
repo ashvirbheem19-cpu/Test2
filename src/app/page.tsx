@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { SpiralAnimation } from "@/components/ui/spiral-animation"
 import { Button } from "@/components/ui/flow-hover-button"
 
-const WORDS = ["short", "cute", "bookworm", "always cold", "troublesome"]
+const WORDS = ["short", "cute", "bookworm", "troublesome"]
 
 export default function Home() {
   const router = useRouter()
