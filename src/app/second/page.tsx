@@ -2,12 +2,15 @@
 
 import { DottedSurface } from "@/components/ui/dotted-surface"
 import { Snitch } from "@/components/ui/snitch"
+import { TogetherSince } from "@/components/ui/together-since"
+import { FallingPetals } from "@/components/ui/falling-petals"
 
 export default function SecondPage() {
   return (
     <div className="relative min-h-screen bg-[#1a0500]">
       <DottedSurface />
       <Snitch />
+      <FallingPetals />
       <div className="relative z-10 flex items-center justify-center min-h-screen px-6">
         <div className="max-w-xl text-center space-y-8">
           <p className="font-[family-name:var(--font-dancing)] text-amber-300/40 text-lg">
@@ -34,6 +37,10 @@ export default function SecondPage() {
               i love you, always and forever. ♡
             </p>
           </div>
+
+          <div className="w-16 h-0.5 bg-amber-500/30 mx-auto" />
+
+          <TogetherSince />
 
           <div className="w-16 h-0.5 bg-amber-500/30 mx-auto" />
 

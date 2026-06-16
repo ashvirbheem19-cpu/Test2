@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
+import { FallingPetals } from "@/components/ui/falling-petals"
 
 export default function LoveLetterPage() {
   const [password, setPassword] = useState("")
@@ -21,6 +22,7 @@ export default function LoveLetterPage() {
   if (unlocked) {
     return (
       <div className="relative min-h-screen bg-[#1a0500] flex items-center justify-center px-6">
+        <FallingPetals />
         <div className="max-w-xl text-center space-y-6 animate-in fade-in duration-1000">
           <p className="font-[family-name:var(--font-dancing)] text-amber-300/40 text-lg">
             unlocked just for you
@@ -62,6 +64,7 @@ export default function LoveLetterPage() {
 
   return (
     <div className="relative min-h-screen bg-[#1a0500] flex items-center justify-center px-6">
+      <FallingPetals />
       <div className="max-w-md w-full text-center space-y-6">
         <p className="font-[family-name:var(--font-dancing)] text-amber-300/40 text-lg">
           a locked letter for you
