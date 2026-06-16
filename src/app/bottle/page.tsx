@@ -1,16 +1,36 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+
+const STORAGE_KEY = "bottle-messages"
+
+function loadMessages(): string[] {
+  try {
+    const data = localStorage.getItem(STORAGE_KEY)
+    return data ? JSON.parse(data) : []
+  } catch {
+    return []
+  }
+}
 
 export default function BottlePage() {
   const [message, setMessage] = useState("")
   const [sent, setSent] = useState(false)
   const [floating, setFloating] = useState(false)
+  const [messages, setMessages] = useState<string[]>([])
+  const [showLog, setShowLog] = useState(false)
+
+  useEffect(() => {
+    setMessages(loadMessages())
+  }, [])
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault()
     if (!message.trim()) return
+    const updated = [message.trim(), ...loadMessages()]
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+    setMessages(updated)
     setFloating(true)
     setTimeout(() => {
       setSent(true)
@@ -91,9 +111,44 @@ export default function BottlePage() {
           )}
         </AnimatePresence>
 
+        {messages.length > 0 && (
+          <div className="pt-4 border-t border-cyan-800/20">
+            <button
+              onClick={() => setShowLog(!showLog)}
+              className="font-[family-name:var(--font-dancing)] text-cyan-400/40 text-sm hover:text-cyan-300 transition-colors"
+            >
+              {showLog ? "hide bottle log" : `view bottle log (${messages.length})`}
+            </button>
+
+            <AnimatePresence>
+              {showLog && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="overflow-hidden mt-4"
+                >
+                  <div className="max-h-48 overflow-y-auto space-y-2 text-left">
+                    {messages.map((msg, i) => (
+                      <div
+                        key={i}
+                        className="bg-[#0d1f33]/40 border border-cyan-800/20 rounded-lg px-4 py-2"
+                      >
+                        <p className="font-[family-name:var(--font-dancing)] text-cyan-300/60 text-sm">
+                          {msg}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
+
         <a
           href="/second"
-          className="inline-block mt-4 text-cyan-400/30 font-[family-name:var(--font-dancing)] text-base hover:text-cyan-300 transition-colors"
+          className="inline-block text-cyan-400/30 font-[family-name:var(--font-dancing)] text-base hover:text-cyan-300 transition-colors"
         >
           ← back
         </a>

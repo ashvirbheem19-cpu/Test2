@@ -55,6 +55,35 @@ export default function FireplacePage() {
 
   return (
     <div className="relative min-h-screen bg-[#0d0a06] flex flex-col items-center justify-center px-6 py-12">
+      <style jsx>{`
+        @keyframes flame1 {
+          0%, 100% { transform: scaleY(1) scaleX(1) translateX(0); opacity: 0.9; }
+          25% { transform: scaleY(1.12) scaleX(0.92) translateX(3px); opacity: 1; }
+          50% { transform: scaleY(0.95) scaleX(1.08) translateX(-2px); opacity: 0.85; }
+          75% { transform: scaleY(1.08) scaleX(0.95) translateX(4px); opacity: 0.95; }
+        }
+        @keyframes flame2 {
+          0%, 100% { transform: scaleY(1) scaleX(1) translateX(0); opacity: 0.85; }
+          30% { transform: scaleY(0.9) scaleX(1.1) translateX(-3px); opacity: 0.95; }
+          60% { transform: scaleY(1.15) scaleX(0.9) translateX(2px); opacity: 0.8; }
+          80% { transform: scaleY(1.05) scaleX(1.05) translateX(-1px); opacity: 0.9; }
+        }
+        @keyframes flame3 {
+          0%, 100% { transform: scaleY(1) scaleX(1); opacity: 0.7; }
+          20% { transform: scaleY(1.2) scaleX(0.85); opacity: 0.9; }
+          55% { transform: scaleY(0.85) scaleX(1.15); opacity: 0.6; }
+          75% { transform: scaleY(1.1) scaleX(0.9); opacity: 0.8; }
+        }
+        @keyframes ember {
+          0% { transform: translateY(0) translateX(0) scale(1); opacity: 1; }
+          100% { transform: translateY(-120px) translateX(var(--drift)) scale(0); opacity: 0; }
+        }
+        @keyframes glow {
+          0%, 100% { opacity: 0.15; }
+          50% { opacity: 0.3; }
+        }
+      `}</style>
+
       <div className="max-w-lg w-full text-center space-y-8">
         <p className="font-[family-name:var(--font-dancing)] text-amber-300/40 text-lg">
           cozy corner
@@ -63,23 +92,46 @@ export default function FireplacePage() {
           our fireplace
         </h1>
 
-        <div className="relative h-64 md:h-80 rounded-2xl bg-[#1a0f08] border border-amber-900/30 overflow-hidden">
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-xs h-24">
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-7xl select-none">
-              🪵🪵
+        <div className={`relative h-64 md:h-80 rounded-2xl overflow-hidden transition-all duration-700 ${lit ? "shadow-[0_0_100px_rgba(251,146,60,0.15)]" : ""}`}>
+          <div className="absolute inset-0 bg-gradient-to-b from-[#1a0f08] via-[#1a0f08] to-[#0d0a06]" />
+
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-xs">
+            <div className="flex justify-center gap-4 text-5xl select-none">
+              <span className="relative">
+                🪵
+                {lit && <span className="absolute -inset-2 bg-orange-500/20 rounded-full blur-md animate-pulse" style={{ animationDuration: "2s" }} />}
+              </span>
+              <span className="relative">
+                🪵
+                {lit && <span className="absolute -inset-2 bg-orange-500/20 rounded-full blur-md animate-pulse" style={{ animationDuration: "1.5s" }} />}
+              </span>
             </div>
           </div>
 
           {lit && (
             <>
-              <div className="absolute bottom-16 left-1/2 -translate-x-1/2 w-24 h-32">
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-16 h-28 rounded-t-full bg-gradient-to-t from-orange-600 via-amber-400 to-yellow-200 animate-pulse" style={{ animationDuration: "0.8s" }} />
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-10 h-20 rounded-t-full bg-gradient-to-t from-orange-500 via-amber-300 to-yellow-100 animate-pulse" style={{ animationDuration: "1.1s" }} />
-                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-6 h-14 rounded-t-full bg-gradient-to-t from-yellow-400 to-white animate-pulse" style={{ animationDuration: "0.6s" }} />
+              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-32 h-40">
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-28 h-36 rounded-t-full bg-gradient-to-t from-red-700 via-orange-500 to-amber-300 origin-bottom" style={{ animation: "flame1 0.8s ease-in-out infinite", filter: "blur(1px)" }} />
+                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-20 h-28 rounded-t-full bg-gradient-to-t from-orange-600 via-amber-400 to-yellow-200 origin-bottom" style={{ animation: "flame2 1.1s ease-in-out infinite" }} />
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-12 h-20 rounded-t-full bg-gradient-to-t from-amber-400 via-yellow-300 to-white origin-bottom" style={{ animation: "flame3 0.6s ease-in-out infinite", filter: "blur(2px)" }} />
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-6 h-12 rounded-t-full bg-gradient-to-t from-yellow-200 to-white origin-bottom" style={{ animation: "flame1 0.5s ease-in-out infinite", filter: "blur(3px)" }} />
               </div>
 
-              <div className="absolute inset-0 rounded-2xl shadow-[inset_0_0_80px_rgba(251,146,60,0.15)] pointer-events-none" />
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-40 h-20 bg-gradient-to-t from-orange-500/20 to-transparent rounded-full blur-xl" />
+              <div className="absolute bottom-16 left-1/2 -translate-x-1/2 w-64 h-12 bg-gradient-to-t from-orange-500/20 to-transparent rounded-full blur-2xl" style={{ animation: "glow 1.5s ease-in-out infinite" }} />
+
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute w-1 h-1 rounded-full bg-orange-300"
+                  style={{
+                    bottom: 80 + Math.random() * 20,
+                    left: `${44 + Math.random() * 12}%`,
+                    animation: `ember ${1.5 + Math.random() * 2}s ease-out ${Math.random() * 2}s infinite`,
+                    "--drift": `${-20 + Math.random() * 40}px`,
+                    opacity: 0.3 + Math.random() * 0.5,
+                  } as React.CSSProperties}
+                />
+              ))}
             </>
           )}
 

@@ -61,40 +61,65 @@ export default function FortunePage() {
           {!cracked ? (
             <motion.div
               key="cookie"
-              exit={{ scale: 0, rotate: 180, opacity: 0 }}
-              transition={{ duration: 0.4 }}
+              exit={{ opacity: 0 }}
               className="space-y-4"
             >
               <div
                 onClick={() => setCracked(true)}
-                className="text-8xl cursor-pointer select-none hover:scale-110 transition-transform inline-block"
+                className="relative inline-block cursor-pointer select-none"
               >
-                🥟
+                <div className="text-8xl">🥟</div>
+                <p className="font-[family-name:var(--font-dancing)] text-amber-300/30 text-sm mt-4">
+                  tap the cookie
+                </p>
               </div>
-              <p className="font-[family-name:var(--font-dancing)] text-amber-300/30 text-sm">
-                tap the cookie
-              </p>
             </motion.div>
           ) : (
             <motion.div
               key="fortune"
-              initial={{ opacity: 0, y: 20, scale: 0.8 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               className="space-y-6"
             >
+              <div className="flex justify-center items-center gap-2 h-24">
+                <motion.div
+                  initial={{ x: 0, rotate: 0 }}
+                  animate={{ x: -40, rotate: -30, opacity: 0 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  className="text-6xl"
+                >
+                  🥟
+                </motion.div>
+                <motion.div
+                  initial={{ x: 0, rotate: 0, scale: 1 }}
+                  animate={{ x: 40, rotate: 30, opacity: 0 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  className="text-6xl"
+                >
+                  🥟
+                </motion.div>
+              </div>
+
               <motion.div
-                initial={{ rotate: -10, scale: 0 }}
-                animate={{ rotate: 0, scale: 1 }}
-                transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
-                className="text-6xl"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 200, delay: 0.4 }}
+                className="text-5xl"
               >
                 🥠
               </motion.div>
-              <div className="bg-[#2a0a00]/60 border border-amber-800/30 rounded-xl p-8 backdrop-blur-sm">
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="bg-[#2a0a00]/60 border border-amber-800/30 rounded-xl p-8 backdrop-blur-sm"
+              >
                 <p className="font-[family-name:var(--font-dancing)] text-amber-200/80 text-xl md:text-2xl leading-relaxed">
                   &ldquo;{fortune}&rdquo;
                 </p>
-              </div>
+              </motion.div>
+
               <p className="font-[family-name:var(--font-dancing)] text-amber-300/30 text-sm">
                 come back tomorrow for a new fortune ✦
               </p>
