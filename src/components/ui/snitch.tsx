@@ -30,26 +30,28 @@ export function Snitch() {
   const idRef = useRef(0)
 
   useEffect(() => {
-    const handle = (e: MouseEvent) => {
+    const handleMove = (e: MouseEvent) => {
       mouseX.set(e.clientX - 20)
       mouseY.set(e.clientY - 20)
     }
-    window.addEventListener("mousemove", handle)
-    return () => window.removeEventListener("mousemove", handle)
+    const handleClick = (e: MouseEvent) => {
+      const id = idRef.current++
+      setSparkles((prev) => [...prev, { id, x: e.clientX - 8, y: e.clientY - 8 }])
+      setTimeout(() => setSparkles((prev) => prev.filter((s) => s.id !== id)), 900)
+    }
+    window.addEventListener("mousemove", handleMove)
+    window.addEventListener("click", handleClick)
+    return () => {
+      window.removeEventListener("mousemove", handleMove)
+      window.removeEventListener("click", handleClick)
+    }
   }, [mouseX, mouseY])
-
-  const handleClick = (e: React.MouseEvent) => {
-    const id = idRef.current++
-    setSparkles((prev) => [...prev, { id, x: e.clientX - 8, y: e.clientY - 8 }])
-    setTimeout(() => setSparkles((prev) => prev.filter((s) => s.id !== id)), 900)
-  }
 
   return (
     <>
       <motion.div
-        className="fixed top-0 left-0 z-50 cursor-pointer select-none"
+        className="fixed top-0 left-0 z-50 pointer-events-none select-none"
         style={{ x: springX, y: springY }}
-        onClick={handleClick}
       >
         <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
           <circle cx="20" cy="22" r="6" fill="#fbbf24" stroke="#f59e0b" strokeWidth="1.5" />
