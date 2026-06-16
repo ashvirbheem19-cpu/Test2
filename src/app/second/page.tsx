@@ -60,6 +60,12 @@ export default function SecondPage() {
               >
                 🫗 potion of love
               </a>
+              <a
+                href="/gallery"
+                className="px-4 py-2 rounded-md border border-amber-700/40 text-amber-300/60 font-[family-name:var(--font-dancing)] text-base hover:bg-amber-900/30 hover:text-amber-200 transition-all"
+              >
+                📸 our gallery
+              </a>
             </div>
           </div>
         </div>
