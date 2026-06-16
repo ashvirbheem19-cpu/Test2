@@ -85,6 +85,42 @@ export default function SecondPage() {
               >
                 ⏳ time capsule
               </a>
+              <a
+                href="/fireplace"
+                className="px-4 py-2 rounded-md border border-amber-700/40 text-amber-300/60 font-[family-name:var(--font-dancing)] text-base hover:bg-amber-900/30 hover:text-amber-200 transition-all"
+              >
+                🔥 fireplace
+              </a>
+              <a
+                href="/bottle"
+                className="px-4 py-2 rounded-md border border-amber-700/40 text-amber-300/60 font-[family-name:var(--font-dancing)] text-base hover:bg-amber-900/30 hover:text-amber-200 transition-all"
+              >
+                🧴 message in a bottle
+              </a>
+              <a
+                href="/fortune"
+                className="px-4 py-2 rounded-md border border-amber-700/40 text-amber-300/60 font-[family-name:var(--font-dancing)] text-base hover:bg-amber-900/30 hover:text-amber-200 transition-all"
+              >
+                🥟 daily fortune
+              </a>
+              <a
+                href="/moodboard"
+                className="px-4 py-2 rounded-md border border-amber-700/40 text-amber-300/60 font-[family-name:var(--font-dancing)] text-base hover:bg-amber-900/30 hover:text-amber-200 transition-all"
+              >
+                🎨 mood board
+              </a>
+              <a
+                href="/starmap"
+                className="px-4 py-2 rounded-md border border-amber-700/40 text-amber-300/60 font-[family-name:var(--font-dancing)] text-base hover:bg-amber-900/30 hover:text-amber-200 transition-all"
+              >
+                ✦ star map
+              </a>
+              <a
+                href="/open-when"
+                className="px-4 py-2 rounded-md border border-amber-700/40 text-amber-300/60 font-[family-name:var(--font-dancing)] text-base hover:bg-amber-900/30 hover:text-amber-200 transition-all"
+              >
+                💌 open when...
+              </a>
             </div>
           </div>
         </div>
