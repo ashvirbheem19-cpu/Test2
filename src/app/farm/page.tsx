@@ -15,12 +15,12 @@ interface Animal {
 
 function initAnimals(): Animal[] {
   return [
-    { id: 1, type: "cow", name: "mochi", emoji: "🐮", x: 12, y: 20, facing: 1 },
-    { id: 2, type: "cow", name: "toffee", emoji: "🐮", x: 45, y: 55, facing: -1 },
-    { id: 3, type: "cow", name: "biscuit", emoji: "🐮", x: 75, y: 35, facing: 1 },
-    { id: 4, type: "goat", name: "pickle", emoji: "🐐", x: 30, y: 70, facing: -1 },
-    { id: 5, type: "goat", name: "noodle", emoji: "🐐", x: 60, y: 15, facing: 1 },
-    { id: 6, type: "goat", name: "miso", emoji: "🐐", x: 85, y: 65, facing: -1 },
+    { id: 1, type: "cow", name: "mochi", emoji: "🐮", x: 10, y: 20, facing: 1 },
+    { id: 2, type: "cow", name: "toffee", emoji: "🐮", x: 85, y: 15, facing: -1 },
+    { id: 3, type: "cow", name: "biscuit", emoji: "🐮", x: 50, y: 70, facing: 1 },
+    { id: 4, type: "goat", name: "pickle", emoji: "🐐", x: 25, y: 50, facing: -1 },
+    { id: 5, type: "goat", name: "noodle", emoji: "🐐", x: 70, y: 40, facing: 1 },
+    { id: 6, type: "goat", name: "miso", emoji: "🐐", x: 90, y: 80, facing: -1 },
   ]
 }
 
@@ -64,12 +64,12 @@ export default function FarmPage() {
       setAnimals((prev) =>
         prev.map((a) => ({
           ...a,
-          x: Math.max(5, Math.min(95, a.x + (Math.random() - 0.5) * 16)),
-          y: Math.max(5, Math.min(85, a.y + (Math.random() - 0.5) * 12)),
+          x: Math.max(0, Math.min(100, a.x + (Math.random() - 0.5) * 24)),
+          y: Math.max(0, Math.min(100, a.y + (Math.random() - 0.5) * 18)),
           facing: (Math.random() > 0.1 ? 1 : -1) as 1 | -1,
         }))
       )
-    }, 1500)
+    }, 1200)
     return () => clearInterval(id)
   }, [feeding])
 
@@ -91,8 +91,8 @@ export default function FarmPage() {
     const randomIn = (n: number) => Math.random() * n
     const particles = Array.from({ length: 8 }, (_, i) => ({
       id: i,
-      x: 30 + randomIn(40),
-      y: 10 + randomIn(30),
+      x: randomIn(80),
+      y: randomIn(80),
       emoji: FOOD_EMOJIS[Math.floor(Math.random() * FOOD_EMOJIS.length)],
     }))
     setFoodParticles(particles)
@@ -102,8 +102,8 @@ export default function FarmPage() {
       setAnimals((prev) =>
         prev.map((a) => ({
           ...a,
-          x: 20 + randomIn(60),
-          y: 20 + randomIn(50),
+          x: randomIn(85),
+          y: randomIn(85),
           facing: (Math.random() > 0.5 ? 1 : -1) as 1 | -1,
         }))
       )
@@ -113,16 +113,16 @@ export default function FarmPage() {
       const msgs = Array.from({ length: 2 }, (_, i) => ({
         id: i,
         text: randomMessage(animalTypes[i % 2]),
-        x: 25 + randomIn(30),
-        y: 25 + randomIn(20),
+        x: 20 + randomIn(60),
+        y: 20 + randomIn(60),
       }))
       setMessages(msgs)
 
       // Hearts everywhere
       const hts = Array.from({ length: 6 }, (_, i) => ({
         id: i,
-        x: 15 + randomIn(70),
-        y: 15 + randomIn(60),
+        x: randomIn(90),
+        y: randomIn(90),
       }))
       setHearts(hts)
 
@@ -179,16 +179,16 @@ export default function FarmPage() {
         </div>
       </div>
 
-      {/* Pasture area */}
-      <div className="absolute bottom-[8%] left-[10%] right-[10%] h-[45%]">
+      {/* Pasture area - full screen for wandering */}
+      <div className="absolute inset-0">
         {/* Animals */}
         <div className="relative w-full h-full">
           {animals.map((animal) => (
             <motion.div
               key={animal.id}
               className="absolute flex flex-col items-center gap-1"
-              animate={{ x: `${animal.x}%`, y: `${animal.y}%` }}
-              transition={{ type: "spring", stiffness: 40, damping: 10, mass: 0.8 }}
+              animate={{ left: `${animal.x}%`, top: `${animal.y}%` }}
+              transition={{ type: "spring", stiffness: 35, damping: 8, mass: 0.8 }}
             >
               {/* Highland cow mane for cows */}
               {animal.type === "cow" && (
