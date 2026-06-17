@@ -121,6 +121,12 @@ export default function SecondPage() {
               >
                 💌 open when...
               </a>
+              <a
+                href="/farm"
+                className="px-4 py-2 rounded-md border border-amber-700/40 text-amber-300/60 font-[family-name:var(--font-dancing)] text-base hover:bg-amber-900/30 hover:text-amber-200 transition-all"
+              >
+                🌾 our farm
+              </a>
             </div>
           </div>
         </div>
