@@ -13,14 +13,6 @@ interface AnimalData {
   facing: 1 | -1
 }
 
-const HILLS = [
-  { pos: [-5, 0, -3] as [number, number, number], scale: 2.5 },
-  { pos: [4, 0, 1] as [number, number, number], scale: 2.0 },
-  { pos: [-1, 0, 4] as [number, number, number], scale: 3.0 },
-  { pos: [6, 0, -4] as [number, number, number], scale: 1.8 },
-  { pos: [0, 0, -5] as [number, number, number], scale: 2.2 },
-]
-
 export default function FarmScene({ animals }: { animals: AnimalData[] }) {
   const animalPositions = useMemo(
     () =>
@@ -54,16 +46,6 @@ export default function FarmScene({ animals }: { animals: AnimalData[] }) {
         <planeGeometry args={[28, 20]} />
         <meshStandardMaterial color="#5a9e4a" roughness={0.9} />
       </mesh>
-
-      {/* Hills */}
-      {HILLS.map((h, i) => (
-        <mesh key={`hill-${i}`} position={h.pos} receiveShadow>
-          <sphereGeometry
-            args={[h.scale, 16, 12, 0, Math.PI * 2, 0, Math.PI / 2]}
-          />
-          <meshStandardMaterial color="#4a8c3f" roughness={0.9} />
-        </mesh>
-      ))}
 
       {/* Animals */}
       {animalPositions.map((a) =>

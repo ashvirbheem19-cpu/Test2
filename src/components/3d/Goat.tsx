@@ -23,8 +23,8 @@ export default function Goat({
 
   useFrame(() => {
     if (!group.current) return
-    group.current.position.x += (pos[0] - group.current.position.x) * 0.04
-    group.current.position.z += (pos[2] - group.current.position.z) * 0.04
+    group.current.position.x += (pos[0] - group.current.position.x) * 0.055
+    group.current.position.z += (pos[2] - group.current.position.z) * 0.055
   })
 
   return (
