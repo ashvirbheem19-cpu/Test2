@@ -13,14 +13,16 @@ interface Animal {
   facing: 1 | -1
 }
 
-const ANIMALS: Omit<Animal, "x" | "y" | "facing">[] = [
-  { id: 1, type: "cow", name: "mochi", emoji: "🐮" },
-  { id: 2, type: "cow", name: "toffee", emoji: "🐮" },
-  { id: 3, type: "cow", name: "biscuit", emoji: "🐮" },
-  { id: 4, type: "goat", name: "pickle", emoji: "🐐" },
-  { id: 5, type: "goat", name: "noodle", emoji: "🐐" },
-  { id: 6, type: "goat", name: "miso", emoji: "🐐" },
-]
+function initAnimals(): Animal[] {
+  return [
+    { id: 1, type: "cow", name: "mochi", emoji: "🐮", x: 12, y: 20, facing: 1 },
+    { id: 2, type: "cow", name: "toffee", emoji: "🐮", x: 45, y: 55, facing: -1 },
+    { id: 3, type: "cow", name: "biscuit", emoji: "🐮", x: 75, y: 35, facing: 1 },
+    { id: 4, type: "goat", name: "pickle", emoji: "🐐", x: 30, y: 70, facing: -1 },
+    { id: 5, type: "goat", name: "noodle", emoji: "🐐", x: 60, y: 15, facing: 1 },
+    { id: 6, type: "goat", name: "miso", emoji: "🐐", x: 85, y: 65, facing: -1 },
+  ]
+}
 
 const FOOD_EMOJIS = ["🌿", "🍎", "🥕", "🌾"]
 
@@ -43,35 +45,17 @@ const FEED_MESSAGES: Record<string, string[]> = {
   ],
 }
 
-function randomIn(max: number) {
-  return Math.random() * max
-}
-
 function randomMessage(type: "cow" | "goat"): string {
   const msgs = FEED_MESSAGES[type]
   return msgs[Math.floor(Math.random() * msgs.length)]
 }
 
 export default function FarmPage() {
-  const [animals, setAnimals] = useState<Animal[]>([])
+  const [animals, setAnimals] = useState<Animal[]>(initAnimals)
   const [feeding, setFeeding] = useState(false)
   const [foodParticles, setFoodParticles] = useState<{ id: number; x: number; y: number; emoji: string }[]>([])
   const [messages, setMessages] = useState<{ id: number; text: string; x: number; y: number }[]>([])
   const [hearts, setHearts] = useState<{ id: number; x: number; y: number }[]>([])
-
-  const pastureW = 100
-  const pastureH = 100
-
-  useEffect(() => {
-    setAnimals(
-      ANIMALS.map((a) => ({
-        ...a,
-        x: 10 + randomIn(80),
-        y: 10 + randomIn(70),
-        facing: Math.random() > 0.5 ? 1 : -1,
-      }))
-    )
-  }, [])
 
   // Animals wander
   useEffect(() => {
@@ -104,6 +88,7 @@ export default function FarmPage() {
     setFeeding(true)
 
     // Scatter food particles
+    const randomIn = (n: number) => Math.random() * n
     const particles = Array.from({ length: 8 }, (_, i) => ({
       id: i,
       x: 30 + randomIn(40),
@@ -203,8 +188,7 @@ export default function FarmPage() {
               key={animal.id}
               className="absolute flex flex-col items-center gap-1"
               animate={{ x: `${animal.x}%`, y: `${animal.y}%` }}
-              transition={{ type: "spring", stiffness: 50, damping: 12, mass: 0.5 }}
-              style={{ x: `${animal.x}%`, y: `${animal.y}%` }}
+              transition={{ type: "spring", stiffness: 40, damping: 10, mass: 0.8 }}
             >
               {/* Highland cow mane for cows */}
               {animal.type === "cow" && (
