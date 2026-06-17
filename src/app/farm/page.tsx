@@ -1,7 +1,11 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, Suspense } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import dynamic from "next/dynamic"
+import { Canvas } from "@react-three/fiber"
+
+const FarmScene = dynamic(() => import("@/components/3d/FarmScene"), { ssr: false })
 
 interface Animal {
   id: number
@@ -46,7 +50,6 @@ export default function FarmPage() {
   const [messages, setMessages] = useState<{ id: number; text: string; x: number; y: number }[]>([])
   const [hearts, setHearts] = useState<{ id: number; x: number; y: number }[]>([])
 
-  // Animals wander continuously across the grass
   useEffect(() => {
     if (feeding) return
     const id = setInterval(() => {
@@ -62,7 +65,6 @@ export default function FarmPage() {
     return () => clearInterval(id)
   }, [feeding])
 
-  // Cleanup old messages and hearts
   useEffect(() => {
     if (messages.length === 0 && hearts.length === 0) return
     const id = setTimeout(() => {
@@ -76,7 +78,6 @@ export default function FarmPage() {
     if (feeding) return
     setFeeding(true)
 
-    // Scatter food particles in a central area
     const randomIn = (n: number) => Math.random() * n
     const particles = Array.from({ length: 8 }, (_, i) => ({
       id: i,
@@ -86,7 +87,6 @@ export default function FarmPage() {
     }))
     setFoodParticles(particles)
 
-    // Animals gather together to eat after a moment
     setTimeout(() => {
       setAnimals((prev) =>
         prev.map((a, i) => ({
@@ -97,7 +97,6 @@ export default function FarmPage() {
         }))
       )
 
-      // Show messages about the feast
       const msgs = Array.from({ length: 2 }, (_, i) => ({
         id: i,
         text: randomMessage(),
@@ -106,7 +105,6 @@ export default function FarmPage() {
       }))
       setMessages(msgs)
 
-      // Hearts everywhere
       const hts = Array.from({ length: 6 }, (_, i) => ({
         id: i,
         x: 30 + randomIn(40),
@@ -121,7 +119,7 @@ export default function FarmPage() {
   }, [feeding])
 
   return (
-    <div className="relative min-h-screen bg-[#87CEEB] overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-[#87CEEB] via-[#B0E0F6] to-[#D4F0F0]">
       <style jsx>{`
         @keyframes float {
           0%, 100% { transform: translateY(0); }
@@ -133,71 +131,36 @@ export default function FarmPage() {
         }
       `}</style>
 
-      {/* Sky */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#87CEEB] via-[#B0E0F6] to-[#D4F0F0]" />
+      {/* 3D Scene */}
+      <div className="absolute inset-0 bottom-[10%] z-0">
+        <Suspense fallback={null}>
+          <Canvas
+            shadows
+            camera={{ position: [0, 9, 10], fov: 45, near: 0.1, far: 30 }}
+            style={{ width: "100%", height: "100%", pointerEvents: "none" }}
+          >
+            <FarmScene animals={animals} />
+          </Canvas>
+        </Suspense>
+      </div>
 
       {/* Clouds */}
-      <div className="absolute top-8 left-[10%] text-4xl opacity-60" style={{ animation: "float 4s ease-in-out infinite" }}>☁️</div>
-      <div className="absolute top-12 left-[40%] text-3xl opacity-40" style={{ animation: "float 5s ease-in-out infinite 1s" }}>☁️</div>
-      <div className="absolute top-6 left-[70%] text-5xl opacity-50" style={{ animation: "float 6s ease-in-out infinite 0.5s" }}>☁️</div>
+      <div className="absolute top-8 left-[10%] text-4xl opacity-60 pointer-events-none z-10" style={{ animation: "float 4s ease-in-out infinite" }}>☁️</div>
+      <div className="absolute top-12 left-[40%] text-3xl opacity-40 pointer-events-none z-10" style={{ animation: "float 5s ease-in-out infinite 1s" }}>☁️</div>
+      <div className="absolute top-6 left-[70%] text-5xl opacity-50 pointer-events-none z-10" style={{ animation: "float 6s ease-in-out infinite 0.5s" }}>☁️</div>
+      <div className="absolute top-6 right-12 text-5xl pointer-events-none z-10" style={{ animation: "sparkle 3s ease-in-out infinite" }}>☀️</div>
 
-      {/* Sun */}
-      <div className="absolute top-6 right-12 text-5xl" style={{ animation: "sparkle 3s ease-in-out infinite" }}>☀️</div>
-
-      {/* Hills */}
-      <div className="absolute bottom-0 left-0 right-0 h-[70%]">
-        <div className="absolute bottom-0 left-[-10%] w-[60%] h-[80%] bg-gradient-to-t from-[#4a8c3f] via-[#5da04f] to-[#6db85c] rounded-t-full opacity-80" />
-        <div className="absolute bottom-0 right-[-10%] w-[55%] h-[70%] bg-gradient-to-t from-[#3d7a34] via-[#4f9443] to-[#5da84f] rounded-t-full opacity-70" />
-        <div className="absolute bottom-0 left-[20%] w-[65%] h-[60%] bg-gradient-to-t from-[#5a9e4a] via-[#6db85c] to-[#7ecc6a] rounded-t-full opacity-60" />
-
-        {/* Ground */}
-        <div className="absolute bottom-0 left-0 right-0 h-[60%] bg-gradient-to-t from-[#3d7a34] via-[#5a9e4a] to-[#7ecc6a]" />
-      </div>
-
-      {/* Fence */}
-      <div className="absolute bottom-[40%] left-0 right-0 h-8 flex items-end">
-        <div className="w-full flex justify-around">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <div key={i} className="flex flex-col items-center">
-              <div className="w-1.5 h-6 bg-[#8B6914] rounded-t-full" />
-              <div className="w-4 h-1 bg-[#A0782C] rounded" />
-              <div className="w-1.5 h-6 bg-[#8B6914]" />
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Pasture area - over the grass/hills */}
-      <div className="absolute bottom-0 left-0 right-0 h-[70%]">
-        {/* Animals */}
+      {/* Animal name labels */}
+      <div className="absolute bottom-0 left-0 right-0 h-[70%] pointer-events-none z-20">
         <div className="relative w-full h-full">
           {animals.map((animal) => (
             <motion.div
               key={animal.id}
-              className="absolute flex flex-col items-center gap-1"
-              animate={{ left: `${animal.x}%`, top: `${animal.y}%` }}
+              className="absolute flex flex-col items-center"
+              animate={{ left: `${animal.x}%`, top: `${animal.y - 6}%` }}
               transition={{ duration: 0.8, ease: "easeInOut" }}
             >
-              {/* Highland cow mane for cows */}
-              {animal.type === "cow" && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex gap-0.5">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className="w-2 h-2 rounded-full bg-[#C4843E] opacity-60"
-                      style={{ marginLeft: i % 2 === 0 ? "-2px" : "0", marginTop: i % 2 === 0 ? "0" : "2px" }}
-                    />
-                  ))}
-                </div>
-              )}
-              <motion.span
-                className="text-5xl md:text-6xl select-none"
-                animate={{ scaleX: animal.facing }}
-                transition={{ duration: 0.3 }}
-              >
-                {animal.emoji}
-              </motion.span>
-              <span className="font-[family-name:var(--font-dancing)] text-[#3d2a1a]/60 text-xs md:text-sm bg-white/50 px-2 py-0.5 rounded-full backdrop-blur-sm">
+              <span className="font-[family-name:var(--font-dancing)] text-[#3d2a1a]/70 text-xs md:text-sm bg-white/60 px-2 py-0.5 rounded-full backdrop-blur-sm whitespace-nowrap">
                 {animal.name}
               </span>
             </motion.div>
@@ -209,7 +172,7 @@ export default function FarmPage() {
       {foodParticles.map((p) => (
         <motion.div
           key={p.id}
-          className="absolute text-2xl pointer-events-none z-20"
+          className="absolute text-2xl pointer-events-none z-30"
           initial={{ opacity: 1, y: 0, x: `${p.x}%` }}
           animate={{ opacity: 0, y: -120, x: `${p.x + (Math.random() - 0.5) * 10}%` }}
           transition={{ duration: 1.5, ease: "easeOut" }}
@@ -227,7 +190,7 @@ export default function FarmPage() {
             initial={{ opacity: 0, scale: 0, y: 0 }}
             animate={{ opacity: 1, scale: 1, y: -40 }}
             exit={{ opacity: 0, scale: 0 }}
-            className="absolute z-30 font-[family-name:var(--font-dancing)] text-[#3d2a1a] bg-white/80 backdrop-blur-sm px-4 py-2 rounded-xl text-sm md:text-base shadow-lg border border-amber-200/50"
+            className="absolute z-40 font-[family-name:var(--font-dancing)] text-[#3d2a1a] bg-white/80 backdrop-blur-sm px-4 py-2 rounded-xl text-sm md:text-base shadow-lg border border-amber-200/50"
             style={{ left: `${m.x}%`, top: `${m.y}%` }}
           >
             {m.text}
@@ -239,7 +202,7 @@ export default function FarmPage() {
       {hearts.map((h) => (
         <motion.div
           key={h.id}
-          className="absolute z-20 text-xl pointer-events-none"
+          className="absolute z-30 text-xl pointer-events-none"
           initial={{ opacity: 1, scale: 0, y: 0 }}
           animate={{ opacity: 0, scale: 1.5, y: -60 }}
           transition={{ duration: 2, ease: "easeOut" }}
@@ -250,7 +213,7 @@ export default function FarmPage() {
       ))}
 
       {/* Feed button */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-40">
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50">
         <motion.button
           onClick={handleFeed}
           disabled={feeding}
@@ -262,7 +225,7 @@ export default function FarmPage() {
       </div>
 
       {/* Header */}
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-40 text-center">
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 text-center">
         <h1 className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl text-white/90 drop-shadow-lg">
           our farm ♡
         </h1>
@@ -274,7 +237,7 @@ export default function FarmPage() {
       {/* Back */}
       <a
         href="/second"
-        className="absolute top-4 left-4 z-40 text-white/50 font-[family-name:var(--font-dancing)] text-base hover:text-white/80 transition-colors"
+        className="absolute top-4 left-4 z-50 text-white/50 font-[family-name:var(--font-dancing)] text-base hover:text-white/80 transition-colors"
       >
         ← back
       </a>
