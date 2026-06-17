@@ -15,39 +15,28 @@ interface Animal {
 
 function initAnimals(): Animal[] {
   return [
-    { id: 1, type: "cow", name: "mochi", emoji: "🐮", x: 10, y: 20, facing: 1 },
-    { id: 2, type: "cow", name: "toffee", emoji: "🐮", x: 85, y: 15, facing: -1 },
-    { id: 3, type: "cow", name: "biscuit", emoji: "🐮", x: 50, y: 70, facing: 1 },
-    { id: 4, type: "goat", name: "pickle", emoji: "🐐", x: 25, y: 50, facing: -1 },
-    { id: 5, type: "goat", name: "noodle", emoji: "🐐", x: 70, y: 40, facing: 1 },
-    { id: 6, type: "goat", name: "miso", emoji: "🐐", x: 90, y: 80, facing: -1 },
+    { id: 1, type: "cow", name: "Stout", emoji: "🐮", x: 15, y: 50, facing: 1 },
+    { id: 2, type: "cow", name: "Henry", emoji: "🐮", x: 75, y: 60, facing: -1 },
+    { id: 3, type: "goat", name: "Vincent van Goat", emoji: "🐐", x: 40, y: 45, facing: 1 },
+    { id: 4, type: "goat", name: "George", emoji: "🐐", x: 60, y: 70, facing: -1 },
   ]
 }
 
 const FOOD_EMOJIS = ["🌿", "🍎", "🥕", "🌾"]
 
-const FEED_MESSAGES: Record<string, string[]> = {
-  cow: [
-    "moo! this is delicious! 🐮",
-    "mochi loves the fresh grass!",
-    "toffee wags her tail happily!",
-    "biscuit gives you a gentle nuzzle!",
-    "yummy! more please! 🥕",
-    "the cows are so happy! 🐮",
-  ],
-  goat: [
-    "baa! thank you! 🐐",
-    "pickle does a little hop!",
-    "noodle nibbles happily!",
-    "miso bleats with joy!",
-    "this is the best snack ever!",
-    "the goats are dancing! 🎉",
-  ],
-}
+const FEED_MESSAGES: string[] = [
+  "moo! this is delicious! 🐮",
+  "baa! thank you! 🐐",
+  "so yummy! more please! 🥕",
+  "the animals are so happy! ♡",
+  "this is the best snack ever!",
+  "they love the fresh grass! 🌿",
+  "everyone is gathering to eat!",
+  "what a lovely farm feast!",
+]
 
-function randomMessage(type: "cow" | "goat"): string {
-  const msgs = FEED_MESSAGES[type]
-  return msgs[Math.floor(Math.random() * msgs.length)]
+function randomMessage(): string {
+  return FEED_MESSAGES[Math.floor(Math.random() * FEED_MESSAGES.length)]
 }
 
 export default function FarmPage() {
@@ -57,19 +46,19 @@ export default function FarmPage() {
   const [messages, setMessages] = useState<{ id: number; text: string; x: number; y: number }[]>([])
   const [hearts, setHearts] = useState<{ id: number; x: number; y: number }[]>([])
 
-  // Animals wander
+  // Animals wander continuously across the grass
   useEffect(() => {
     if (feeding) return
     const id = setInterval(() => {
       setAnimals((prev) =>
         prev.map((a) => ({
           ...a,
-          x: Math.max(0, Math.min(100, a.x + (Math.random() - 0.5) * 24)),
-          y: Math.max(0, Math.min(100, a.y + (Math.random() - 0.5) * 18)),
-          facing: (Math.random() > 0.1 ? 1 : -1) as 1 | -1,
+          x: Math.max(2, Math.min(98, a.x + (Math.random() - 0.5) * 20)),
+          y: Math.max(38, Math.min(92, a.y + (Math.random() - 0.5) * 14)),
+          facing: a.x + (Math.random() - 0.5) * 20 > a.x ? 1 : -1,
         }))
       )
-    }, 1200)
+    }, 700)
     return () => clearInterval(id)
   }, [feeding])
 
@@ -87,42 +76,41 @@ export default function FarmPage() {
     if (feeding) return
     setFeeding(true)
 
-    // Scatter food particles
+    // Scatter food particles in a central area
     const randomIn = (n: number) => Math.random() * n
     const particles = Array.from({ length: 8 }, (_, i) => ({
       id: i,
-      x: randomIn(80),
-      y: randomIn(80),
+      x: 35 + randomIn(30),
+      y: 45 + randomIn(25),
       emoji: FOOD_EMOJIS[Math.floor(Math.random() * FOOD_EMOJIS.length)],
     }))
     setFoodParticles(particles)
 
-    // Animals react after a moment
+    // Animals gather together to eat after a moment
     setTimeout(() => {
       setAnimals((prev) =>
-        prev.map((a) => ({
+        prev.map((a, i) => ({
           ...a,
-          x: randomIn(85),
-          y: randomIn(85),
-          facing: (Math.random() > 0.5 ? 1 : -1) as 1 | -1,
+          x: 38 + i * 8 + randomIn(4),
+          y: 50 + randomIn(12),
+          facing: 1,
         }))
       )
 
-      // Show random messages for a couple animals
-      const animalTypes = ["cow", "goat"] as const
+      // Show messages about the feast
       const msgs = Array.from({ length: 2 }, (_, i) => ({
         id: i,
-        text: randomMessage(animalTypes[i % 2]),
-        x: 20 + randomIn(60),
-        y: 20 + randomIn(60),
+        text: randomMessage(),
+        x: 30 + randomIn(40),
+        y: 35 + randomIn(20),
       }))
       setMessages(msgs)
 
       // Hearts everywhere
       const hts = Array.from({ length: 6 }, (_, i) => ({
         id: i,
-        x: randomIn(90),
-        y: randomIn(90),
+        x: 30 + randomIn(40),
+        y: 35 + randomIn(30),
       }))
       setHearts(hts)
 
@@ -179,8 +167,8 @@ export default function FarmPage() {
         </div>
       </div>
 
-      {/* Pasture area - full screen for wandering */}
-      <div className="absolute inset-0">
+      {/* Pasture area - over the grass/hills */}
+      <div className="absolute bottom-0 left-0 right-0 h-[70%]">
         {/* Animals */}
         <div className="relative w-full h-full">
           {animals.map((animal) => (
@@ -188,7 +176,7 @@ export default function FarmPage() {
               key={animal.id}
               className="absolute flex flex-col items-center gap-1"
               animate={{ left: `${animal.x}%`, top: `${animal.y}%` }}
-              transition={{ type: "spring", stiffness: 35, damping: 8, mass: 0.8 }}
+              transition={{ duration: 0.8, ease: "easeInOut" }}
             >
               {/* Highland cow mane for cows */}
               {animal.type === "cow" && (
