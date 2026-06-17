@@ -132,7 +132,7 @@ export default function FarmPage() {
       `}</style>
 
       {/* 3D Scene */}
-      <div className="absolute inset-0 bottom-[10%] z-0">
+      <div className="absolute inset-0 z-0">
         <Suspense fallback={null}>
           <Canvas
             shadows
@@ -149,24 +149,6 @@ export default function FarmPage() {
       <div className="absolute top-12 left-[40%] text-3xl opacity-40 pointer-events-none z-10" style={{ animation: "float 5s ease-in-out infinite 1s" }}>☁️</div>
       <div className="absolute top-6 left-[70%] text-5xl opacity-50 pointer-events-none z-10" style={{ animation: "float 6s ease-in-out infinite 0.5s" }}>☁️</div>
       <div className="absolute top-6 right-12 text-5xl pointer-events-none z-10" style={{ animation: "sparkle 3s ease-in-out infinite" }}>☀️</div>
-
-      {/* Animal name labels */}
-      <div className="absolute bottom-0 left-0 right-0 h-[70%] pointer-events-none z-20">
-        <div className="relative w-full h-full">
-          {animals.map((animal) => (
-            <motion.div
-              key={animal.id}
-              className="absolute flex flex-col items-center"
-              animate={{ left: `${animal.x}%`, top: `${animal.y - 6}%` }}
-              transition={{ duration: 0.8, ease: "easeInOut" }}
-            >
-              <span className="font-[family-name:var(--font-dancing)] text-[#3d2a1a]/70 text-xs md:text-sm bg-white/60 px-2 py-0.5 rounded-full backdrop-blur-sm whitespace-nowrap">
-                {animal.name}
-              </span>
-            </motion.div>
-          ))}
-        </div>
-      </div>
 
       {/* Food particles */}
       {foodParticles.map((p) => (

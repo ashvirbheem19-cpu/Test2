@@ -13,14 +13,12 @@ interface AnimalData {
   facing: 1 | -1
 }
 
-const GROUND_COLOR = "#5a9e4a"
-const HILL_COLOR = "#4a8c3f"
-
 const HILLS = [
   { pos: [-5, 0, -3] as [number, number, number], scale: 2.5 },
   { pos: [4, 0, 1] as [number, number, number], scale: 2.0 },
   { pos: [-1, 0, 4] as [number, number, number], scale: 3.0 },
   { pos: [6, 0, -4] as [number, number, number], scale: 1.8 },
+  { pos: [0, 0, -5] as [number, number, number], scale: 2.2 },
 ]
 
 export default function FarmScene({ animals }: { animals: AnimalData[] }) {
@@ -39,7 +37,6 @@ export default function FarmScene({ animals }: { animals: AnimalData[] }) {
 
   return (
     <>
-      {/* Lighting */}
       <ambientLight intensity={0.55} />
       <directionalLight
         position={[8, 12, 5]}
@@ -50,35 +47,30 @@ export default function FarmScene({ animals }: { animals: AnimalData[] }) {
       />
       <directionalLight position={[-4, 6, -3]} intensity={0.25} />
 
-      {/* Fog */}
-      <fog attach="fog" args={["#B0E0F6", 12, 22]} />
+      <fog attach="fog" args={["#B0E0F6", 12, 24]} />
 
       {/* Ground */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, 0]} receiveShadow>
-        <planeGeometry args={[24, 18]} />
-        <meshStandardMaterial color={GROUND_COLOR} roughness={0.9} />
+        <planeGeometry args={[28, 20]} />
+        <meshStandardMaterial color="#5a9e4a" roughness={0.9} />
       </mesh>
 
       {/* Hills */}
       {HILLS.map((h, i) => (
-        <mesh
-          key={`hill-${i}`}
-          position={h.pos}
-          receiveShadow
-        >
+        <mesh key={`hill-${i}`} position={h.pos} receiveShadow>
           <sphereGeometry
             args={[h.scale, 16, 12, 0, Math.PI * 2, 0, Math.PI / 2]}
           />
-          <meshStandardMaterial color={HILL_COLOR} roughness={0.9} />
+          <meshStandardMaterial color="#4a8c3f" roughness={0.9} />
         </mesh>
       ))}
 
       {/* Animals */}
       {animalPositions.map((a) =>
         a.type === "cow" ? (
-          <HighlandCow key={a.id} pos={a.pos} facing={a.facing} />
+          <HighlandCow key={a.id} pos={a.pos} facing={a.facing} name={a.name} />
         ) : (
-          <Goat key={a.id} pos={a.pos} facing={a.facing} />
+          <Goat key={a.id} pos={a.pos} facing={a.facing} name={a.name} />
         ),
       )}
     </>
