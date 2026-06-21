@@ -104,16 +104,23 @@ function pickMessage(dateStr: string): string {
   return MESSAGES[Math.abs(hash) % MESSAGES.length]
 }
 
+function toLocalDateStr(d: Date): string {
+  return d.getFullYear() + "-" +
+    String(d.getMonth() + 1).padStart(2, "0") + "-" +
+    String(d.getDate()).padStart(2, "0")
+}
+
 function getTomorrow(): string {
   const d = new Date()
   d.setDate(d.getDate() + 1)
-  return d.toISOString().split("T")[0]
+  return toLocalDateStr(d)
 }
 
 function isUnlockable(dateStr: string): boolean {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
-  return new Date(dateStr).getTime() <= today.getTime()
+  const target = new Date(dateStr + "T00:00:00")
+  return target.getTime() <= today.getTime()
 }
 
 export default function TimeCapsulePage() {
@@ -146,7 +153,7 @@ export default function TimeCapsulePage() {
   }
 
   const daysLeft = saved && !unlocked
-    ? Math.ceil((new Date(targetDate).getTime() - Date.now()) / 86400000)
+    ? Math.ceil((new Date(targetDate + "T00:00:00").getTime() - Date.now()) / 86400000)
     : 0
 
   return (
@@ -211,7 +218,7 @@ export default function TimeCapsulePage() {
                       patience, my love. good things come to those who wait.
                     </p>
                     <p className="font-[family-name:var(--font-dancing)] text-[#d4c5a9]/20 text-base blur-sm select-none">
-                      come back on {new Date(targetDate).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })} to read your letter.
+                      come back on {new Date(targetDate + "T00:00:00").toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })} to read your letter.
                     </p>
                   </div>
                 </div>
