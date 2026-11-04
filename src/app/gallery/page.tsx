@@ -3,21 +3,11 @@
 import { useState, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
-const US_IMAGES = [
-  { src: "https://i.ibb.co/fYPsJLDD/Whats-App-Image-2026-06-17-at-00-21-14-1.jpg", alt: "us" },
-  { src: "https://i.ibb.co/PzW3mjG5/Whats-App-Image-2026-06-17-at-00-21-14-2.jpg", alt: "us" },
-  { src: "https://i.ibb.co/zH6nDtm2/Whats-App-Image-2026-06-17-at-00-21-15.jpg", alt: "us" },
-  { src: "https://i.ibb.co/LhrntNG8/Whats-App-Image-2026-06-17-at-00-21-15-1.jpg", alt: "us" },
-  { src: "https://i.ibb.co/gbv2znKT/Whats-App-Image-2026-06-17-at-00-21-15-2.jpg", alt: "us" },
-  { src: "https://i.ibb.co/gZY0Fvfy/Whats-App-Image-2026-06-17-at-00-21-15-3.jpg", alt: "us" },
-  { src: "https://i.ibb.co/Nnsy9VNf/Whats-App-Image-2026-06-17-at-00-21-16.jpg", alt: "us" },
-  { src: "https://i.ibb.co/HfQHNyBS/Whats-App-Image-2026-06-17-at-00-21-16-1.jpg", alt: "us" },
-  { src: "https://i.ibb.co/qvLpMVP/Whats-App-Image-2026-06-17-at-00-21-16-2.jpg", alt: "us" },
-  { src: "https://i.ibb.co/RkrBSD1q/Whats-App-Image-2026-06-17-at-00-21-16-3.jpg", alt: "us" },
-  { src: "https://i.ibb.co/d4F5pnCc/Whats-App-Image-2026-06-17-at-00-21-17.jpg", alt: "us" },
-  { src: "https://i.ibb.co/6cp0XB3y/Whats-App-Image-2026-06-17-at-00-21-17-1.jpg", alt: "us" },
-  { src: "https://i.ibb.co/ZzTwjdW9/Whats-App-Image-2026-06-17-at-00-21-14.jpg", alt: "us" },
-]
+// Photos live in public/images/us/1.jpeg ... 15.jpeg (served by Vercel itself, no external host)
+const US_IMAGES = Array.from({ length: 15 }, (_, i) => ({
+  src: `/images/us/${i + 1}.jpeg`,
+  alt: "us",
+}))
 
 const FLOWER_IMAGES = [
   { src: "/images/flowers/1.jpg", alt: "flower" },
