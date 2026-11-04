@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
 // Photos live in public/images/us/1.jpeg ... 15.jpeg (served by Vercel itself, no external host)
@@ -21,6 +21,12 @@ const FLOWER_IMAGES = [
 function ImageCard({ src, alt, onClick }: { src: string; alt: string; onClick: () => void }) {
   const [loaded, setLoaded] = useState(false)
   const [errored, setErrored] = useState(false)
+  const imgRef = useRef<HTMLImageElement>(null)
+
+  // If the image finished loading before React attached onLoad (cached / fast load), mark it loaded now
+  useEffect(() => {
+    if (imgRef.current?.complete && imgRef.current.naturalWidth > 0) setLoaded(true)
+  }, [])
 
   if (errored) {
     return (
@@ -36,13 +42,16 @@ function ImageCard({ src, alt, onClick }: { src: string; alt: string; onClick: (
         <div className="absolute inset-0 bg-gradient-to-br from-amber-900/10 to-[#2a0a00] animate-pulse" />
       )}
       <img
+        ref={imgRef}
         src={src}
         alt={alt}
+        loading="eager"
+        decoding="async"
         onLoad={() => setLoaded(true)}
         onError={() => setErrored(true)}
-        className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-85 ${loaded ? "opacity-100" : "opacity-0"}`}
+        className="relative z-10 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-hover:opacity-85"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#1a0500]/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <div className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-t from-[#1a0500]/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
     </div>
   )
 }
